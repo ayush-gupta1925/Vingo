@@ -13,7 +13,7 @@ const navigate = useNavigate()
      const {myShopData} = useSelector(state=>state.owner)
     
      const [name,setName] = useState("")
-      const [price,setPrice] = useState(0)
+      const [price,setPrice] = useState("")
     
   const [loading, setLoading] = useState(false);
        const [frontendImage,setFrontendImage] = useState(null)
