@@ -26,12 +26,21 @@ const navigate = useNavigate()
        const [foodType,setFoodType] = useState("veg")
 
 
-       const handleImage = (e)=>{
-           e.preventDefault()
-           const file = e.target.files[0]
-           setBackendImage(file)
-           setFrontendImage(URL.createObjectURL(file))
-       }
+       // const handleImage = (e)=>{
+       //     e.preventDefault()
+       //     const file = e.target.files[0]
+       //     setBackendImage(file)
+       //     setFrontendImage(URL.createObjectURL(file))
+       // }
+
+     const handleImage = (e) => {
+  e.preventDefault();
+  const file = e.target.files[0];
+  if (!file) return; // ← check added
+  setBackendImage(file);
+  setFrontendImage(URL.createObjectURL(file));
+};
+
 
  const handleSubmit = async(e)=>{
  e.preventDefault()
