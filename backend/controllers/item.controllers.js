@@ -36,32 +36,87 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 
 
+// export const addItem = async (req, res) => {
+//   try {
+
+//       console.log("Body:", req.body);
+//     console.log("File:", req.file);
+//     console.log("UserId:", req.userId);
+//     const { name, category, foodType, price } = req.body;
+
+//     if (!name || !category || !foodType || !price) {
+//       return res.status(400).json({ message: "All fields are required" });
+//     }
+
+//     let image = null;
+//     if (req.file) {
+//       try {
+//         image = await uploadOnCloudinary(req.file.path);
+//       } catch (err) {
+//         return res.status(500).json({ message: `Image upload failed: ${err.message}` });
+//       }
+//     }
+
+//     const shop = await Shop.findOne({ owner: req.userId });
+//     if (!shop) {
+//       return res.status(404).json({ message: "Shop not found for this user" });
+//     }
+
+//     const item = await Item.create({
+//       name,
+//       category,
+//       foodType,
+//       price,
+//       image,
+//       shop: shop._id,
+//     });
+
+//     shop.items.push(item._id);
+//     await shop.save();
+
+//     await shop.populate([
+//       { path: "owner" },
+//       { path: "items", options: { sort: { updatedAt: -1 } } },
+//     ]);
+
+//     return res.status(201).json(shop);
+//   } catch (error) {
+//     console.error("Add Item Error:", error);
+//     return res.status(500).json({ message: `Server error: ${error.message}` });
+//   }
+// };
+
+
 export const addItem = async (req, res) => {
   try {
+ 
 
-      console.log("Body:", req.body);
-    console.log("File:", req.file);
-    console.log("UserId:", req.userId);
     const { name, category, foodType, price } = req.body;
-
     if (!name || !category || !foodType || !price) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
+    // Upload image if file exists
     let image = null;
-    if (req.file) {
+    if (req.file?.path) {
       try {
         image = await uploadOnCloudinary(req.file.path);
+        if (!image) return res.status(400).json({ message: "Image upload failed" });
       } catch (err) {
+        console.error("Cloudinary upload error:", err);
         return res.status(500).json({ message: `Image upload failed: ${err.message}` });
       }
+    } else {
+      return res.status(400).json({ message: "Image file is required" });
     }
 
+    // Find user's shop
     const shop = await Shop.findOne({ owner: req.userId });
     if (!shop) {
       return res.status(404).json({ message: "Shop not found for this user" });
     }
 
+    // Create item
     const item = await Item.create({
       name,
       category,
