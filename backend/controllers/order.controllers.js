@@ -736,6 +736,8 @@ export const sendDeliveryOtp = async(req,res)=>{
     shopOrder.deliveryOtp = otp
     shopOrder.otpExpires = Date.now() + 5*60*1000
     await order.save()
+    console.log(process.env.USER_EMAIL)
+console.log(process.env.USER_PASSWORD)
     console.log("before calling rhr sendotp mail")
     await sendDeliveryOtpMail(order.user,otp)
     console.log("after calling rhr sendotp mail")
