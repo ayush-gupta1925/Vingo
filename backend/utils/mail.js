@@ -23,13 +23,30 @@ export const sendOtpMail = async (to, otp) => {
   });
 };
 
-export const sendDeliveryOtpMail = async (user, otp) => {
-  await transporter.sendMail({
-    from: process.env.USER_EMAIL, // ✅ "from" not "form"
-    to: user.email,
-    subject: "Delivery Otp",
-    html: `<p>Your OTP for Delivery is <b>${otp}</b>. It expires in 5 minutes.</p>`
-  });
+// export const sendDeliveryOtpMail = async (user, otp) => {
+//   await transporter.sendMail({
+//     from: process.env.USER_EMAIL, // ✅ "from" not "form"
+//     to: user.email,
+//     subject: "Delivery Otp",
+//     html: `<p>Your OTP for Delivery is <b>${otp}</b>. It expires in 5 minutes.</p>`
+//   });
 
+// };
+
+
+export const sendDeliveryOtpMail = async (user, otp) => {
+  try {
+    await transporter.sendMail({
+      from: process.env.USER_EMAIL,
+      to: user.email,
+      subject: "Delivery OTP",
+      html: `<p>Your OTP for Delivery is <b>${otp}</b>. It expires in 5 minutes.</p>`
+    });
+    console.log("OTP sent successfully to", user.email);
+  } catch (error) {
+    console.error("Failed to send OTP:", error.message);
+    throw new Error("Failed to send OTP");
+  }
 };
+
 
