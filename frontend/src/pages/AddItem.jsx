@@ -57,7 +57,14 @@ const navigate = useNavigate()
 formData.append("image",backendImage)
   }
   setLoading(true)
-  const result = await axios.post(`${serverUrl}/api/item/add-item`,formData,{withCredentials:true})
+  // const result = await axios.post(`${serverUrl}/api/item/add-item`,formData,{withCredentials:true})
+       const result = await axios.post(`${serverUrl}/api/item/add-item`, formData, {
+  withCredentials: true,
+  headers: {
+    "Content-Type": "multipart/form-data"
+  }
+});
+
   dispatch(setMyShopData(result.data))
   setLoading(false)
   console.log(result.data)
@@ -100,7 +107,7 @@ formData.append("image",backendImage)
 
 <div>
       <label className='block text-sm font-medium text-gray-700 mb-1'>Food Image</label>
-      <input type='file'   accept='image/*' placeholder='Enter Shop Name' className='w-full px-4 py-2 border rounded-lg  focus:outline-none focus:ring-orange-400 focus:ring-2' onChange={handleImage} />
+      <input type='file'    name="image"  accept='image/*' placeholder='Enter Shop Name' className='w-full px-4 py-2 border rounded-lg  focus:outline-none focus:ring-orange-400 focus:ring-2' onChange={handleImage} />
 
 
 {frontendImage &&  <div className='mt-4'>
