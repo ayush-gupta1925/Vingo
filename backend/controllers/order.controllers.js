@@ -724,6 +724,7 @@ export const getOrderById = async(req,res)=>{
 
 export const sendDeliveryOtp = async(req,res)=>{
   try {
+    console.log("send otp")
     const {orderId,shopOrderId} = req.body;
     const order = await Order.findById(orderId).populate("user")
     const shopOrder = order.shopOrders.id(shopOrderId)
@@ -735,7 +736,9 @@ export const sendDeliveryOtp = async(req,res)=>{
     shopOrder.deliveryOtp = otp
     shopOrder.otpExpires = Date.now() + 5*60*1000
     await order.save()
+    console.log("before calling rhr sendotp mail")
     await sendDeliveryOtpMail(order.user,otp)
+    console.log("after calling rhr sendotp mail")
     return res.status(200).json({message:`Otp send Successfully ${order.user?.fullName}`})
   } catch (error) {
       return res
