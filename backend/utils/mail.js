@@ -12,7 +12,8 @@ const transporter = nodemailer.createTransport({
     pass: process.env.USER_PASSWORD // App Password
   }
 });
-
+console.log(process.env.USER_EMAIL)
+console.log(process.env.USER_PASSWORD)
 export const sendOtpMail = async (to, otp) => {
   await transporter.sendMail({
     from: process.env.USER_EMAIL, // ✅ "from" not "form"
@@ -29,5 +30,7 @@ export const sendDeliveryOtpMail = async (user, otp) => {
     subject: "Delivery Otp",
     html: `<p>Your OTP for Delivery is <b>${otp}</b>. It expires in 5 minutes.</p>`
   });
+  console.log("sendDeliveryOtpMail",process.env.USER_EMAIL)
+console.log("sendDeliveryOtpMail",process.env.USER_PASSWORD)
 };
 
