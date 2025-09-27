@@ -34,19 +34,44 @@ export const sendOtpMail = async (to, otp) => {
 // };
 
 
+// export const sendDeliveryOtpMail = async (user, otp) => {
+//   try {
+//     await transporter.sendMail({
+//       from: process.env.USER_EMAIL,
+//       to: user.email,
+//       subject: "Delivery OTP",
+//       html: `<p>Your OTP for Delivery is <b>${otp}</b>. It expires in 5 minutes.</p>`
+//     });
+//     console.log("OTP sent successfully to", user.email);
+//   } catch (error) {
+//     console.error("Failed to send OTP:", error.message);
+//     throw new Error("Failed to send OTP");
+//   }
+// };
+
+
 export const sendDeliveryOtpMail = async (user, otp) => {
   try {
-    await transporter.sendMail({
-      from: process.env.USER_EMAIL,
-      to: user.email,
-      subject: "Delivery OTP",
-      html: `<p>Your OTP for Delivery is <b>${otp}</b>. It expires in 5 minutes.</p>`
-    });
-    console.log("OTP sent successfully to", user.email);
+    await axios.post(
+      "https://api.sendinblue.com/v3/smtp/email",
+      {
+        sender: { name: "Shopnity", email: process.env.USER_EMAIL },
+        to: [{ email: user.email, name: user.fullName }],
+        subject: "Delivery OTP",
+        htmlContent: `<p>Your OTP for Delivery is <b>${otp}</b>. It expires in 5 minutes.</p>`,
+      },
+      {
+        headers: {
+          "api-key": process.env.USER_PASSWORD,
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+      }
+    );
+    console.log("OTP sent successfully via Sendinblue API to", user.email);
   } catch (error) {
-    console.error("Failed to send OTP:", error.message);
+    console.error("Failed to send OTP via API:", error.message);
     throw new Error("Failed to send OTP");
   }
 };
-
 
