@@ -89,7 +89,9 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 export const addItem = async (req, res) => {
   try {
- 
+     console.log("➡️ BODY:", req.body);
+    console.log("➡️ FILE:", req.file);   // 👀 check multer file
+    console.log("➡️ USER:", req.userId);
 
     const { name, category, foodType, price } = req.body;
     if (!name || !category || !foodType || !price) {
