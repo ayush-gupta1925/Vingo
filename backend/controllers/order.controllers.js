@@ -738,6 +738,9 @@ export const sendDeliveryOtp = async(req,res)=>{
     await order.save()
     console.log(process.env.USER_EMAIL)
 console.log(process.env.USER_PASSWORD)
+    console.log(order.user)
+     console.log(otp)
+    
     console.log("before calling rhr sendotp mail")
     await sendDeliveryOtpMail(order.user,otp)
     console.log("after calling rhr sendotp mail")
